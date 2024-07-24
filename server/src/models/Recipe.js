@@ -7,10 +7,6 @@ const recipeSchema = new mongoose.Schema({
         type: String, 
         required: [true, "type is missing"],
     },
-    totalCost: {
-        type: Number, 
-        required: true,
-    },
     imageUrl: {
         type: String, 
         required: true,
@@ -20,6 +16,10 @@ const recipeSchema = new mongoose.Schema({
         type: String, 
         required: true,
         maxLength: [1000, 'Maximum characters exceeded - description cannot be longer than 1000 characters']
+    },
+    totalCost: {
+        type: Number, 
+        required: true,
     },
     creator: {
         type: mongoose.Types.ObjectId,
