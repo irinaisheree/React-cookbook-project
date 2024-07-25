@@ -30,14 +30,14 @@ export default function Navigation() {
 
 				<li>
 					<NavLink
-						to="/login"
+						to="/auth/login"
 					>
 						Login
 					</NavLink>
 				</li>
 
 				<li >	<NavLink
-					to="/register"
+					to="/auth/register"
 
 				>
 					Resgister

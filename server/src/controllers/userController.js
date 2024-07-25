@@ -1,7 +1,8 @@
 const userRouter = require("express").Router();
 // const { getErrorMessage } = require('../utils/errorUtils');
 const userManager = require('../managers/userManager');
-// const { isGuest, isAuth } = require('../middlewares/authMiddleware');
+const { isGuest, isAuth } = require('../middlewares/authMiddleware');
+
 // const User = require('../models/User');
 // const recipeManager = require('../managers/recipeManager');
 // const Recipe = require('../models/Recipe'); // Add this line
@@ -20,21 +21,21 @@ userRouter.post('/register', async (req, res) => {
     }
 });
 
-// userRouter.get('/login', isGuest, (req, res) => {
-//     res.status(405).json({ error: 'GET method not allowed for this endpoint - login' });
-// });
+userRouter.get('/login', isGuest, (req, res) => {
+    res.status(405).json({ error: 'GET method not allowed for this endpoint - login' });
+});
 
-// userRouter.post('/login', isGuest, async (req, res) => {
-//     try {
-//         const { email, password } = req.body;
-//         console.log(req.body);
-//         const token = await userManager.login(email, password);
-//         res.json({ token });
-//     } catch (error) {
-//         console.error('Error logging user:', error);
-//         res.status(401).json({ error: 'Invalid email or password' });
-//     }
-// });
+userRouter.post('/login', isGuest, async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        console.log(req.body);
+        const token = await userManager.login(email, password);
+        res.json({ token });
+    } catch (error) {
+        console.error('Error logging user:', error);
+        res.status(401).json({ error: 'Invalid email or password' });
+    }
+});
 
 // userRouter.get('/logout', isAuth, (req, res) => {
 //     res.status(200).clearCookie('token').send();
