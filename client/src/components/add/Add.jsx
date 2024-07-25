@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-
-export default function Add() {
-  const [recipes, setRecipes] = useState([]);
+export default function AddRecipePage() {
   const [form, setForm] = useState({
     title: '',
     imageUrl: '',
@@ -11,30 +10,31 @@ export default function Add() {
     creator: ''
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setRecipes([...recipes, form]);
-    setForm({
-      title: '',
-      imageUrl: '',
-      description: '',
-      totalCost: '',
-      creator: ''
-    });
-  };
+    try {
+      const response = await fetch('http://localhost:5000/api/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+      });
 
-  const handleEdit = (index) => {
-    const recipeToEdit = recipes[index];
-    setForm(recipeToEdit);
-    setRecipes(recipes.filter((_, i) => i !== index));
-  };
-
-  const handleDelete = (index) => {
-    setRecipes(recipes.filter((_, i) => i !== index));
+      if (response.ok) {
+        navigate('/recipes'); // Redirect to the recipes page after adding
+      } else {
+        console.error('Error adding recipe:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error adding recipe:', error);
+    }
   };
 
   return (
@@ -91,22 +91,6 @@ export default function Add() {
         </label>
         <button type="submit">Add Recipe</button>
       </form>
-
-      <div className="recipe-list">
-        {recipes.map((recipe, index) => (
-          <div className="recipe-item" key={index}>
-            <h3>{recipe.title}</h3>
-            {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} />}
-            <p>{recipe.description}</p>
-            <p>Total Cost: ${recipe.totalCost}</p>
-            <p>Creator: {recipe.creator}</p>
-            <button onClick={() => handleEdit(index)}>Edit</button>
-            <button onClick={() => handleDelete(index)}>Delete</button>
-          </div>
-        ))}
-      </div>
     </div>
   );
-};
-
-
+}

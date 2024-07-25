@@ -1,53 +1,62 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-// const recipe = require('./recipe');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const Recipe = require("./Recipe");
 
 const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  createdRecipes: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Recipe",
     },
-    password: {
-        type: String,
+  ],
+  likedRecipe: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Recipe",
     },
-    createdrecipes: [{
-        type: mongoose.Types.ObjectId,
-        ref: "recipe",
-    }],
-    likedrecipes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "recipe",
-    }],
-});
-
-// Hash password before saving
-userSchema.pre('save', async function (next) {
-    if (this.isModified('password')) {
-        const hash = await bcrypt.hash(this.password, 12);
-        this.password = hash;
-    }
-    next();
+  ],
 });
 
 // Virtual for password confirmation during registration
-userSchema.virtual('repeatPassword')
-    .get(function () {
-        return this._repeatPassword;
-    })
-    .set(function (value) {
-        this._repeatPassword = value;
-    });
+userSchema
+  .virtual("repeatPassword")
+  .get(function () {
+    return this._repeatPassword;
+  })
+  .set(function (value) {
+    this._repeatPassword = value;
+  });
 
 // Validate repeatPassword only during registration
-userSchema.pre('validate', function (next) {
-    if (this.isNew && !this._repeatPassword) {
-        this.invalidate('repeatPassword', 'Password confirmation is required.');
+userSchema.pre("validate", function (next) {
+  if (this.isNew) {
+    if (!this._repeatPassword) {
+      this.invalidate("repeatPassword", "Password confirmation is required.");
+    } else if (this.password !== this._repeatPassword) {
+      this.invalidate("repeatPassword", "The passwords should be matching.");
     }
-    if (this.isNew && this.password !== this._repeatPassword) {
-        this.invalidate('repeatPassword', 'The passwords should be matching.');
-    }
-    next();
+  }
+  next();
 });
 
-const User = mongoose.model('User', userSchema);
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    const hash = await bcrypt.hash(this.password, 12);
+    this.password = hash;
+  }
+  next();
+});
+
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

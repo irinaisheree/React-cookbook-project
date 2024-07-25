@@ -1,4 +1,4 @@
-const expressConfig = require("./config/expressConfig")
+const expressConfig = require('./config/expressConfig')
 const express = require("express")
 const mongoose = require("mongoose")
 const router = require('./controllers/recipeController')
