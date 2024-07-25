@@ -8,7 +8,7 @@ const { isGuest, isAuth } = require('../middlewares/authMiddleware');
 // const Recipe = require('../models/Recipe'); // Add this line
 
 userRouter.get('/register', (req, res) => {
-    res.status(405).json({ error: 'GET method not allowed for this endpoint - register' });
+    res.status(405).json({ error: 'GET recipe allowed for this endpoint - register' });
 });
 
 userRouter.post('/register', async (req, res) => {
@@ -29,8 +29,8 @@ userRouter.post('/login', isGuest, async (req, res) => {
     try {
         const { email, password } = req.body;
         console.log(req.body);
-        const token = await userManager.login(email, password);
-        res.json({ token });
+        const { token, user } = await userManager.login(email, password);
+        res.json({ token, user });
     } catch (error) {
         console.error('Error logging user:', error);
         res.status(401).json({ error: 'Invalid email or password' });
