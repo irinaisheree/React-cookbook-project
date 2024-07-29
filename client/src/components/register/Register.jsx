@@ -50,7 +50,7 @@ export default function Register() {
 
   return (
     <div className="wrapper">
-      <header>Register Form</header>
+      <header>Register Here</header>
       <form onSubmit={handleSubmit}>
         <div className="field">
           <div className="input-area">
@@ -100,7 +100,7 @@ export default function Register() {
         <input type="submit" value="Register" />
       </form>
       <div className="sign-txt">
-        Already a member? <a href="#">Login now</a>
+        Already a member? <a href="/auth/login">Login now</a>
       </div>
     </div>
   );

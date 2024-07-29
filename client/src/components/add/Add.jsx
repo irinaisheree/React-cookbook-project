@@ -7,7 +7,6 @@ export default function AddRecipePage() {
     imageUrl: '',
     description: '',
     totalCost: '',
-    creator: ''
   });
 
   const navigate = useNavigate();
@@ -19,10 +18,12 @@ export default function AddRecipePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/recipes', {
+        const token = localStorage.getItem('token')
+      const response = await fetch('http://localhost:3000/add', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+         'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(form)
       });
@@ -79,7 +80,7 @@ export default function AddRecipePage() {
             required
           />
         </label>
-        <label>
+        {/* <label>
           Creator:
           <input
             type="text"
@@ -88,8 +89,8 @@ export default function AddRecipePage() {
             onChange={handleChange}
             required
           />
-        </label>
-        <button type="submit">Add Recipe</button>
+        </label> */}
+        <button type="submit" onClick={handleSubmit}>Add Recipe</button>
       </form>
     </div>
   );

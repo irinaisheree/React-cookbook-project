@@ -16,7 +16,7 @@ export default function Navigation() {
 				</li>
 
 				<li>
-					<NavLink to="/recepies">Recepies</NavLink>
+					<NavLink to="/recipes">Recipes</NavLink>
 				</li>
 
 				{/* Conditional rendering based on authentication */}

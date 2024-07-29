@@ -9,10 +9,12 @@ import Register from './components/register/Register';
 import Login from './components/login/Login';
 import About from './components/about/About';
 import Add from './components/add/Add';
-// import RecepiesList from './components/recepes-list/Recepies-list';
+
+import RecipesList from './components/recipes-list/Recepies-list';
+import RecipeDetails from './components/details/Details';
 
 function App() {
-    return (
+    return (<>
         <AuthProvider>
             <Navigation />
             <Routes>
@@ -22,9 +24,13 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/auth/register" element={<Register />} />
                 <Route path="/auth/login" element={<Login />} />
+                <Route path="/recipes" element={<RecipesList />} />
+                <Route path="/recipes/:recipeId" element={<RecipeDetails />} />
             </Routes>
-            <Footer />
         </AuthProvider>
+            <Footer />
+            
+            </>
     );
 }
 
