@@ -54,5 +54,39 @@ router.get('/recipes/:recipeId', async (req, res) => {
     }
 });
 
+router.get('/recipes/:recipeId/edit', isAuth, async (req, res) => {
+    try {
+      const recipeId = req.params.recipeId;
+
+      const recipe = await recipeManager.getOneWithDetails(recipeId);
+      
+      if (!recipe) {
+        return res.status(404).json({ error: 'Recipe not found' });
+      }
+      
+      res.status(200).json(recipe);
+    } catch (error) {
+      console.error('Error fetching recipe:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  router.post('/recipes/:recipeId/edit', isAuth, isOwner, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const recipeData = req.body;
+    
+    try {
+      // Update the book data in your database using bookId and bookData
+      // For now, let's assume the book is updated successfully
+      const updatedRecipe = await recipeManager.update(recipeId, recipeData);
+      
+      res.status(200).json(updatedRecipe);
+    } catch (error) {
+      console.error('Error updating recipe:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+
 
 module.exports = router

@@ -1189,3 +1189,72 @@ p a:hover {
   .try-button {
     background: #e94f8d;
   }
+
+  /* edit */
+
+  .edit-recipe-page {
+    width: 80%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #f2e1e9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-recipe-page h2 {
+    color: #a0496c;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.recipe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.recipe-form label {
+    font-size: 16px;
+    color: #867f79;
+    display: flex;
+    flex-direction: column;
+}
+
+.recipe-form input,
+.recipe-form textarea {
+    padding: 10px;
+    border: 1px solid #e3d6dd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #a0496c;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.recipe-form input[type="text"],
+.recipe-form input[type="number"] {
+    height: 40px;
+}
+
+.recipe-form textarea {
+    height: 100px; /* Adjusted height for description */
+    resize: vertical; /* Allow resizing only vertically */
+}
+
+.recipe-form button {
+    padding: 10px;
+    background-color: #a0496c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    align-self: flex-end;
+}
+
+.recipe-form button:hover {
+    background-color: #7c0032;
+}

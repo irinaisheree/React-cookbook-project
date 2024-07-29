@@ -12,6 +12,7 @@ import Add from './components/add/Add';
 
 import RecipesList from './components/recipes-list/Recepies-list';
 import RecipeDetails from './components/details/Details';
+import Edit from './components/edit/Edit';
 
 function App() {
     return (<>
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/auth/login" element={<Login />} />
                 <Route path="/recipes" element={<RecipesList />} />
                 <Route path="/recipes/:recipeId" element={<RecipeDetails />} />
+                <Route path="/recipes/:recipeId/edit" element={<Edit />} />
             </Routes>
         </AuthProvider>
             <Footer />

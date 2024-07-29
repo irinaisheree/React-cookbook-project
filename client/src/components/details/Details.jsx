@@ -52,8 +52,8 @@ const RecipeDetails = () => {
                 {isLoggedIn ? (
                     isOwner(recipe.creator?.email) ? (
                         <>
-                            <Link to={`/recipes/edit/${recipeId}`} className="button edit-button">Edit</Link>
-                            <Link to={`/recipes/delete/${recipeId}`} className="button delete-button">Delete</Link>
+                            <Link to={`/recipes/${recipeId}/edit`} className="button edit-button">Edit</Link>
+                            <Link to={`/recipes/${recipeId}/delete`} className="button delete-button">Delete</Link>
                         </>
                     ) : (
                         <Link to={`/recipes/try/${recipeId}`} className="button try-button">Try this Recipe</Link>

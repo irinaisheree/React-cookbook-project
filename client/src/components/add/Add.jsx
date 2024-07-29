@@ -80,16 +80,7 @@ export default function AddRecipePage() {
             required
           />
         </label>
-        {/* <label>
-          Creator:
-          <input
-            type="text"
-            name="creator"
-            value={form.creator}
-            onChange={handleChange}
-            required
-          />
-        </label> */}
+     
         <button type="submit" onClick={handleSubmit}>Add Recipe</button>
       </form>
     </div>
