@@ -42,7 +42,7 @@ router.get('/recipes/:recipeId', async (req, res) => {
     const recipeId = req.params.recipeId;
     console.log('Requested recipe ID:', recipeId);
     try {
-        const oneRecipe = await recipeManager.getOne(recipeId); 
+        const oneRecipe = await recipeManager.getOneWithDetails(recipeId); 
         console.log(oneRecipe);
         if (!oneRecipe) {
             return res.status(404).json({ message: 'Recipe not found' });

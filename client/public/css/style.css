@@ -1186,4 +1186,6 @@ p a:hover {
   .delete-button:hover {
     background: #c43d3d;
   }
-  
+  .try-button {
+    background: #e94f8d;
+  }

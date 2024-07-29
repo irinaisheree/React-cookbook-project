@@ -41,8 +41,16 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('user'); // Remove user data
     };
 
+    // Check if user is logged in
+    const isLoggedIn = !!user;
+
+    // Check if current user is the owner of a resource
+    const isOwner = (creatorEmail) => {
+        return user?.email === creatorEmail;
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, isLoggedIn, isOwner }}>
             {children}
         </AuthContext.Provider>
     );
@@ -51,5 +59,3 @@ export function AuthProvider({ children }) {
 export function useAuth() {
     return useContext(AuthContext);
 }
-
-
