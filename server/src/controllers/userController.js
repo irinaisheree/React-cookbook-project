@@ -28,7 +28,7 @@ userRouter.get('/login', isGuest, (req, res) => {
 userRouter.post('/login', isGuest, async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log(req.body);
+
         const { token, user } = await userManager.login(email, password);
         res.json({ token, user });
     } catch (error) {
@@ -37,30 +37,35 @@ userRouter.post('/login', isGuest, async (req, res) => {
     }
 });
 
-// userRouter.get('/logout', isAuth, (req, res) => {
-//     res.status(200).clearCookie('token').send();
-// });
+userRouter.get('/logout', isAuth, (req, res) => {
+    res.status(200).clearCookie('token').send();
+});
 
 
+userRouter.get('/:userId/profile', async(req, res) => {
+    const userId = req.params.userId
 
-// // userRouter.get('/profile', userManager.getUserProfile);
-// // userRouter.get('/:userId/profile', userManager.getUserProfile)
-// userRouter.get('/:userId/profile', async(req, res) => {
-//     const userId = req.params.userId
-//     console.log(userId)
 
    
-//     try {
-//         const currentUser = await userManager.getUserProfile(userId)
-//         console.log(currentUser);
-//         if (!currentUser) {
-//             return res.status(404).json({ message: 'User not found' });
-//         }
-//         return res.json(currentUser);
-//     } catch (error) {
-//         console.error('Error fetching one user:', error);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
-// })
+    try {
+        const currentUser = await userManager.getUserProfile(userId)
+
+        if (!currentUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        return res.json(currentUser);
+    } catch (error) {
+        console.error('Error fetching one user:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+})
+
+
+
+
+////
+
+
+  
 
 module.exports = userRouter;

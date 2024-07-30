@@ -12,13 +12,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  createdRecipes: [
+  addedRecipes: [
     {
       type: mongoose.Types.ObjectId,
       ref: "Recipe",
     },
   ],
-  likedRecipe: [
+  likedRecipes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Recipe",
+    },
+  ],
+  checkedRecipes: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Recipe",

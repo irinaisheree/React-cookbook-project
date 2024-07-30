@@ -13,12 +13,12 @@ router.get('/add', (req, res) => {
 
 
 router.post('/add', isAuth, async (req, res) => {
-    console.log(req.body);
+
     const recipeData = req.body;
 
     try {
         const newRecipe = await recipeManager.create(recipeData, req.user._id);
-        console.log(newRecipe);
+
         res.json(newRecipe);
     } catch (error) {
         console.error('Error adding recipe:', error.message);
@@ -30,7 +30,7 @@ router.post('/add', isAuth, async (req, res) => {
 router.get('/recipes', async (req, res) => {
     try {
         const allRecipes = await recipeManager.getAll();
-        console.log(allRecipes)
+
         res.json(allRecipes);
     } catch (error) {
         console.error('Error fetching recipes:', error);
@@ -43,7 +43,7 @@ router.get('/recipes/:recipeId', async (req, res) => {
     console.log('Requested recipe ID:', recipeId);
     try {
         const oneRecipe = await recipeManager.getOneWithDetails(recipeId); 
-        console.log(oneRecipe);
+  
         if (!oneRecipe) {
             return res.status(404).json({ message: 'Recipe not found' });
         }
@@ -86,7 +86,110 @@ router.get('/recipes/:recipeId/edit', isAuth, async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+ 
+  router.post('/recipes/:recipeId/like', isAuth, async (req, res) => {
+    console.log('User:', req.user); // Check the user data
+    console.log('Recipe ID:', req.params.recipeId); // Check the destination ID
+    
+    const recipeId = req.params.recipeId;
+    const userId = req.user.id;
+    try {
+        const likedRecipes = await userManager.likeRecipe(recipeId, userId);
+        res.status(200).json({ message: 'Recipe liked successfully', likedRecipes });
+    } catch (error) {
+        console.error('Error liking recipe:', error); // Log detailed error
+        res.status(400).json({ error: error.message });
+    }
+});
 
 
 
+  router.post('/recipes/:recipeId/unlike', isAuth, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const userId = req.user.id;
+
+    try {
+        const unlikedRecipes = await userManager.unlikeRecipe(recipeId, userId);
+        res.status(200).json({ message: 'Recipe unliked successfully', unlikedRecipes });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+  router.post('/users/:userId/likedRecipes', async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { recipeId } = req.body;
+  
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      if (!user.likedRecipes.includes(recipeId)) {
+        user.likedRecipes.push(recipeId);
+        await user.save();
+      }
+  
+      res.status(200).json({ message: 'Recipe added to liked list' });
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error });
+    }
+  });
+
+
+///
+
+
+
+
+router.get('/users/:userId/likedRecipes', isAuth, async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId).populate('likedRecipes');
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user.likedRecipes);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching liked recipes', error });
+    }
+  });
+
+
+  router.get('/users/:userId/addedRecipes', isAuth, async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId).populate('addedRecipes');
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user.addedRecipes);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching added recipes', error });
+    }
+  });
+
+
+  router.post('/users/:userId/checkedRecipes/:recipeId', isAuth, async (req, res) => {
+    try {
+      const { userId, recipeId } = req.params;
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Toggle recipe's checked status
+      const isChecked = user.checkedRecipes.includes(recipeId);
+      if (isChecked) {
+        user.checkedRecipes.pull(recipeId);
+      } else {
+        user.checkedRecipes.push(recipeId);
+      }
+  
+      await user.save();
+      res.json({ message: 'Checked status updated successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Error updating checked status', error });
+    }
+  });
+  
 module.exports = router

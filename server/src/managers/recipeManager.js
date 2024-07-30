@@ -12,7 +12,7 @@ exports.update = (recipeId, recipeData) => {
     return Recipe.findByIdAndUpdate(recipeId, recipeData);
   };
 
-exports.getOneWithDetails = (recipeId) => this.getOne(recipeId).populate('creator')
+exports.getOneWithDetails = (recipeId) => this.getOne(recipeId).populate('creator').populate('likes')
 
 exports.create = async (recipeData, userId) => {
     try {
@@ -22,10 +22,14 @@ exports.create = async (recipeData, userId) => {
       });
   
       const savedRecipe = await newRecipe.save();
-      await User.findByIdAndUpdate(userId, { $push: { createdrecipes: savedRecipe._id } });
+      await User.findByIdAndUpdate(userId, { $push: { addedRecipes: savedRecipe._id } });
   
       return savedRecipe;
     } catch (error) {
       throw error;
     }
   };
+
+
+
+  

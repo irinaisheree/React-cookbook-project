@@ -50,43 +50,67 @@ exports.login = async (email, password) => {
     };
 }
 
-// exports.getOneUser = (userId) => {
-//     return User.findById(userId)
-//       .populate({
-//         path: 'likedBooks',
-//         select: '_id title author price imageUrl description',
-//       })
-//       .exec();
-//   };
-//   exports.likeBook = async (req, res) => {
-//     const { bookId } = req.params;
-
-//     try {
-//         const book = await Book.findById(bookId);
-//         if (!book) {
-//             return res.status(404).json({ error: 'Book not found' });
-//         }
-
-//         const user = await User.findById(req.user._id);
-//         if (!user) {
-//             return res.status(404).json({ error: 'User not found' });
-//         }
-
-//         // Check if the book is already liked
-//         if (user.likedBooks.includes(bookId)) {
-//             return res.status(400).json({ error: 'Book already liked' });
-//         }
-
-//         // Add the book to the likedBooks array
-//         user.likedBooks.push(bookId);
-//         await user.save();
-
-//         return res.status(200).json({ message: 'Book liked successfully' });
-//     } catch (error) {
-//         console.error('Error liking book:', error);
-//         return res.status(500).json({ error: 'Internal server error' });
-//     }
-// };
+exports.getOneUser = (userId) => {
+    return User.findById(userId)
+      .populate({
+        path: 'likedRecipes',
+        select: '_id title creator price imageUrl description',
+      })
+      .exec();
+  };
 
 
-// exports.getUserProfile = (userId) => User.findById(userId).populate('createdBooks').populate('likedBooks')
+  exports.likeRecipe = async (recipeId, userId) => {
+    try {
+        const recipe = await Recipe.findById(recipeId);
+        if (!recipe) {
+            throw new Error('Recipe not found');
+        }
+
+        if (recipe.likes.includes(userId)) {
+            // Optionally, you can return a different message or status code
+            return { message: 'You already liked this recipe', recipe };
+        }
+
+        recipe.likes.push(userId);
+        await User.findByIdAndUpdate(userId, { $addToSet: { likedRecipes: recipeId } });
+        await recipe.save();
+
+        return { message: 'Recipe liked successfully', recipe };
+    } catch (error) {
+        throw new Error(`Failed to like recipe: ${error.message}`);
+    }
+};
+
+
+exports.unlikeRecipe = async (recipeId, userId) => {
+    try {
+        // Find the destination by ID
+        const recipe = await Recipe.findById(recipeId);
+        if (!recipe) {
+            throw new Error('Recipe not found');
+        }
+  
+        // Check if the user has liked the destination
+        if (!recipe.likes.includes(userId)) {
+            throw new Error('You have not liked this destination');
+        }
+  
+        // Remove the user's ID from the likes array
+        recipe.likes.pull(userId);
+  
+        // Update the user's likedDestinations array without loading the full user object
+        await User.findByIdAndUpdate(userId, {
+            $pull: { likedRecipes: recipeId }
+        });
+  
+        // Save the updated destination
+        await recipe.save();
+  
+        return recipe;
+    } catch (error) {
+        throw new Error(`Failed to unlike recipe: ${error.message}`);
+    }
+  };
+
+exports.getUserProfile = (userId) => User.findById(userId).populate('addedRecipes').populate('likedRecipes').populate('checkedRecipes')

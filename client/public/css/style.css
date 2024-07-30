@@ -1258,3 +1258,80 @@ p a:hover {
 .recipe-form button:hover {
     background-color: #7c0032;
 }
+
+
+/* profile */
+.profile-page {
+	width: 90%;
+	max-width: 1200px;
+	margin: 50px auto;
+	padding: 20px;
+	background: #f9f9f9;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-page h1 {
+	color: #333;
+	font-size: 32px;
+	margin-bottom: 20px;
+	text-align: center;
+  }
+  
+  .profile-content {
+	display: flex;
+	justify-content: space-between;
+  }
+  
+  .profile-section {
+	width: 48%;
+  }
+  
+  .profile-section h2 {
+	color: #444;
+	font-size: 24px;
+	margin-bottom: 15px;
+  }
+  
+  .profile-section ul {
+	list-style: none;
+	padding: 0;
+  }
+  
+  .profile-section li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	padding: 10px;
+	background: #fff;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-section .recipe-info {
+	display: flex;
+	align-items: center;
+	flex-grow: 1;
+  }
+  
+  .profile-section img {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	margin-right: 10px;
+	border-radius: 5px;
+  }
+  
+  .profile-section p {
+	margin: 0;
+	font-size: 16px;
+  }
+  
+  .profile-section input[type="checkbox"] {
+	margin-left: 10px;
+  }
+  .profile-section .likes-count {
+	margin-left: auto; /* Pushes the likes count to the right end of the li */
+	font-weight: bold;
+  }

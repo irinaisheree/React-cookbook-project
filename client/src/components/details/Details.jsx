@@ -1,65 +1,155 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/userContext'; // Correct path
 
 const RecipeDetails = () => {
     const { recipeId } = useParams();
-    const { user, isLoggedIn, isOwner } = useAuth(); // Get user, isLoggedIn, and isOwner from context
-
+    const { user } = useAuth(); // Access userId from AuthContext
     const [recipe, setRecipe] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState('');
+    const [isLiked, setIsLiked] = useState(false); // Track if the recipe is liked by the user
+    const [likeCount, setLikeCount] = useState(0); // Track the total number of likes
+    const navigate = useNavigate();
+
+    const userId = user?._id;
 
     useEffect(() => {
-        async function fetchRecipe() {
+        const fetchRecipe = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/recipes/${recipeId}`); // Replace with your API endpoint
-                if (!response.ok) {
-                    throw new Error("Failed to fetch recipe details.");
-                }
+                const response = await fetch(`http://localhost:3000/recipes/${recipeId}`);
                 const data = await response.json();
-                setRecipe(data);
+                if (!response.ok) throw new Error(data.error || 'Failed to fetch recipe details');
+    
+                if (data && data.creator) {
+                    // Set the initial recipe data
+                    setRecipe(data);
+                    // Determine if the user has liked the recipe
+                    setIsLiked(data.likes.includes(userId)); 
+                    // Set the initial like count
+                    setLikeCount(data.likes.length); 
+                } else {
+                    setError('Recipe data is incomplete.');
+                }
             } catch (err) {
-                console.error(err);
-                setError("Failed to fetch recipe details. Please try again later.");
-            } finally {
-                setLoading(false);
+                setError(err.message);
             }
-        }
-
+        };
+    
         fetchRecipe();
-    }, [recipeId]);
+    }, [recipeId, userId]);
+    
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
+    const handleLike = async () => {
+        if (!userId) {
+            setError('You must be logged in to like recipes.');
+            return;
+        }
+        try {
+            const token = localStorage.getItem('token');
+            const likeUrl = `http://localhost:3000/recipes/${recipeId}/${isLiked ? 'unlike' : 'like'}`;
+            const response = await fetch(likeUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ userId }), // Only send userId
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                // Toggle the like state and adjust like count
+                setIsLiked(prevIsLiked => !prevIsLiked);
+                setLikeCount(prevLikeCount => prevLikeCount + (isLiked ? -1 : 1));
+            } else {
+                setError(data.error || 'Failed to like/unlike recipe');
+            }
+        } catch (err) {
+            setError('An unexpected error occurred.');
+        }
+    };
+    
 
-    if (!recipe) return <p>No recipe found.</p>;
+    const handleEdit = () => {
+        navigate(`/recipes/${recipeId}/edit`); // Redirect to the edit page
+    };
 
-    // Ensure the creator field is populated and contains the necessary details
-    const creatorEmail = recipe.creator?.email;
-    console.log(recipe.creator)
+    const handleDelete = async () => {
+        if (!window.confirm('Are you sure you want to delete this recipe?')) return;
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:3000/recipes/${recipeId}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+
+            if (response.ok) {
+                alert('Recipe deleted successfully!');
+                navigate('/recipes'); // Redirect to the recipes list
+            } else {
+                const contentType = response.headers.get('content-type');
+                let errorMessage = 'Failed to delete recipe';
+
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json();
+                    errorMessage = data.error || errorMessage;
+                }
+
+                throw new Error(errorMessage);
+            }
+        } catch (err) {
+            setError(err.message);
+        }
+    };
 
     return (
         <div className="recipe-details">
-            <h1>{recipe.title}</h1>
-            {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} />}
-            <p>{recipe.description}</p>
-            <p>Total Cost: ${recipe.totalCost}</p>
-            <p>Creator: {creatorEmail}</p>
+            {error && <p className="error">{error}</p>}
+            {recipe ? (
+                <>
+                    <h1>{recipe.title}</h1>
+                    {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} />}
+                    <p>{recipe.description}</p>
+                    <p>Total Cost: ${recipe.totalCost}</p>
+                    <p>Creator: {recipe.creator.email}</p>
+                    <p>Likes: {likeCount}</p>
 
-            {/* Conditional Rendering of Buttons */}
-            <div className="recipe-actions">
-                {isLoggedIn ? (
-                    isOwner(recipe.creator?.email) ? (
-                        <>
-                            <Link to={`/recipes/${recipeId}/edit`} className="button edit-button">Edit</Link>
-                            <Link to={`/recipes/${recipeId}/delete`} className="button delete-button">Delete</Link>
-                        </>
-                    ) : (
-                        <Link to={`/recipes/try/${recipeId}`} className="button try-button">Try this Recipe</Link>
-                    )
-                ) : null}
-            </div>
+                    {/* Conditional Rendering of Buttons */}
+                    <div className="recipe-actions">
+                        {userId ? (
+                            <>
+                                {isLiked ? (
+                                    <button className="button try-button" onClick={handleLike}>
+                                        Added to List
+                                    </button>
+                                ) : (
+                                    <button className="button try-button" onClick={handleLike}>
+                                        Try this Recipe
+                                    </button>
+                                )}
+                                {recipe.creator._id === userId && (
+                                    <>
+                                        <button className="button edit-button" onClick={handleEdit}>
+                                            Edit
+                                        </button>
+                                        <button className="button delete-button" onClick={handleDelete}>
+                                            Delete
+                                        </button>
+                                    </>
+                                )}
+                            </>
+                        ) : (
+                            <p>Please log in to like or edit recipes.</p>
+                        )}
+                    </div>
+                </>
+            ) : (
+                <p>Loading...</p>
+            )}
         </div>
     );
 };

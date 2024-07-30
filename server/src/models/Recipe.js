@@ -25,10 +25,14 @@ const recipeSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: "User"
     },
+    likes: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
 
 })
-
-
 
 
 
