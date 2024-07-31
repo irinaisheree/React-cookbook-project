@@ -3,7 +3,8 @@ const recipeManager = require("../managers/recipeManager")
 const {isAuth, isOwner} = require('../middlewares/authMiddleware');
 const  recipe = require("../models/Recipe");
 const User = require('../models/User')
-const userManager = require("../managers/userManager")
+const userManager = require("../managers/userManager");
+const Recipe = require("../models/Recipe");
 
 
 router.get('/add', (req, res) => {
@@ -86,6 +87,24 @@ router.get('/recipes/:recipeId/edit', isAuth, async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+  router.delete('/recipes/:recipeId/delete', async (req, res) => {
+    try {
+      const recipeId = req.params.recipeId; // Corrected parameter name
+      // Check if the book exists
+      const recipe = await Recipe.findById(recipeId);
+      if (!recipe) {
+        return res.status(404).json({ error: 'Recipe not found' });
+      }
+      await Recipe.findByIdAndDelete(recipeId);
+      return res.status(204).send(); // No content
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Server error' });
+    }
+  });
+ 
+
  
   router.post('/recipes/:recipeId/like', isAuth, async (req, res) => {
     console.log('User:', req.user); // Check the user data

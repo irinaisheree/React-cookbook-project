@@ -14,36 +14,50 @@ const RecipeDetails = () => {
     const userId = user?._id;
 
     useEffect(() => {
+        console.log('Fetching recipe details...');
+        
         const fetchRecipe = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/recipes/${recipeId}`);
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:3000/recipes/${recipeId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Failed to fetch recipe details');
-    
+
                 if (data && data.creator) {
-                    // Set the initial recipe data
                     setRecipe(data);
-                    // Determine if the user has liked the recipe
-                    setIsLiked(data.likes.includes(userId)); 
-                    // Set the initial like count
-                    setLikeCount(data.likes.length); 
+                    console.log('Recipe data:', data);
+
+                    // Check if the current user's ID is present in the likes array
+                    const userLiked = data.likes.some(like => like._id === userId);
+                    console.log('Recipe likes:', data.likes);
+                    console.log('User ID:', userId);
+                    setIsLiked(userLiked);
+                    console.log('Is liked by user:', userLiked);
+                    setLikeCount(data.likes.length);
                 } else {
                     setError('Recipe data is incomplete.');
                 }
             } catch (err) {
+                console.error('Error fetching recipe:', err);
                 setError(err.message);
             }
         };
-    
+
         fetchRecipe();
     }, [recipeId, userId]);
-    
 
     const handleLike = async () => {
         if (!userId) {
             setError('You must be logged in to like recipes.');
             return;
         }
+
+        console.log(`User ${isLiked ? 'unliking' : 'liking'} the recipe...`);
+
         try {
             const token = localStorage.getItem('token');
             const likeUrl = `http://localhost:3000/recipes/${recipeId}/${isLiked ? 'unlike' : 'like'}`;
@@ -53,30 +67,34 @@ const RecipeDetails = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ userId }), // Only send userId
+                body: JSON.stringify({ userId }),
             });
-    
+
             const data = await response.json();
-    
+
             if (response.ok) {
-                // Toggle the like state and adjust like count
-                setIsLiked(prevIsLiked => !prevIsLiked);
-                setLikeCount(prevLikeCount => prevLikeCount + (isLiked ? -1 : 1));
+                setIsLiked(!isLiked);
+                const newLikeCount = likeCount + (isLiked ? -1 : 1);
+                setLikeCount(newLikeCount);
+                console.log('New like count:', newLikeCount);
             } else {
                 setError(data.error || 'Failed to like/unlike recipe');
             }
         } catch (err) {
+            console.error('Error liking/unliking recipe:', err);
             setError('An unexpected error occurred.');
         }
     };
-    
 
     const handleEdit = () => {
+        console.log('Navigating to edit page...');
         navigate(`/recipes/${recipeId}/edit`); // Redirect to the edit page
     };
 
     const handleDelete = async () => {
         if (!window.confirm('Are you sure you want to delete this recipe?')) return;
+
+        console.log('Deleting recipe...');
 
         try {
             const token = localStorage.getItem('token');
@@ -88,6 +106,7 @@ const RecipeDetails = () => {
             });
 
             if (response.ok) {
+                console.log('Recipe deleted successfully');
                 alert('Recipe deleted successfully!');
                 navigate('/recipes'); // Redirect to the recipes list
             } else {
@@ -102,6 +121,7 @@ const RecipeDetails = () => {
                 throw new Error(errorMessage);
             }
         } catch (err) {
+            console.error('Error deleting recipe:', err);
             setError(err.message);
         }
     };
@@ -116,7 +136,7 @@ const RecipeDetails = () => {
                     <p>{recipe.description}</p>
                     <p>Total Cost: ${recipe.totalCost}</p>
                     <p>Creator: {recipe.creator.email}</p>
-                    <p>Likes: {likeCount}</p>
+                    <p>People who will try this recipe: {likeCount}</p>
 
                     {/* Conditional Rendering of Buttons */}
                     <div className="recipe-actions">

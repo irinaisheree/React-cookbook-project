@@ -1147,13 +1147,27 @@ p a:hover {
   }
   
   .recipe-details p {
-    color: #867f79;
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 15px;
-    text-align: justify;
-    text-shadow: 1px 1px 0 #fde8f7;
-  }
+    color: #df6086; /* Text color */
+	font-weight:bolder;
+    font-size: 16px; /* Font size */
+    line-height: 1.6; /* Line height for readability */
+    margin-bottom: 15px; /* Space between paragraphs */
+    text-align: justify; /* Justified text alignment */
+    text-shadow: 1px 1px 0 #fde8f7; /* Text shadow for subtle depth */
+    
+    background-color: #f9f6f4; /* Light background for text block */
+    padding: 10px; /* Padding around text */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #e0d9d5; /* Light border around paragraph */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Soft box shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition for hover effects */
+}
+
+.recipe-details p:hover {
+    transform: scale(1.02); /* Slight scale up on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enhanced shadow on hover */
+}
+
   
   .recipe-actions {
     margin-top: 20px;
@@ -1189,6 +1203,8 @@ p a:hover {
   .try-button {
     background: #e94f8d;
   }
+
+  
 
   /* edit */
 

@@ -70,7 +70,7 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
-      <h1>My Profile</h1>
+      <h1>{user.email}'s Profile</h1>
       <div className="profile-content">
         <div className="profile-section">
           <h2>What to Cook List</h2>
