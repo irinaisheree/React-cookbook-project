@@ -21,7 +21,7 @@ export default function Footer(){
 						</li>
 					</ul>
 				</div>
-				<p className="footnote">&copy; 2011 Healthy Life. All Rights Reserved.</p>
+				<p className="footnote">&copy; 2024 Healthy Life. All Rights Reserved.</p>
 			</div>
 		</div>
   );

@@ -15,6 +15,7 @@ import RecipeDetails from './components/details/Details';
 import Edit from './components/edit/Edit';
 import Profile from './components/profile/Profile';
 import ProtectedRoute from './components/protection/Protection';
+import NotFound from './components/not-found/Not-found';
 
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
                   </ProtectedRoute>
                     } 
                     />
+                                    <Route path="/*" element={<NotFound />} />
                 </Routes>
             </AuthProvider>
             <Footer />
