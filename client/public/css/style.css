@@ -1351,3 +1351,16 @@ p a:hover {
 	margin-left: auto; /* Pushes the likes count to the right end of the li */
 	font-weight: bold;
   }
+
+  /* navigation */
+  #header ul li a {
+    display: block;
+    color: #fffbff; /* White text color */
+    line-height: 50px;
+    font-size: 14px; /* Slightly larger font size */
+    text-transform: capitalize;
+    text-decoration: none; /* Remove underline */
+    font-weight: normal; /* Normal font weight */
+    padding: 0 15px; /* Horizontal padding for spacing */
+    transition: background-color 0.3s, color 0.3s, text-shadow 0.3s; /* Smooth transitions */
+}

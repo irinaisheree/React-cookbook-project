@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/userContext'; // Adjust path as needed
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const Profile = () => {
   const { user, isLoggedIn } = useAuth();
@@ -78,7 +79,9 @@ const Profile = () => {
             {likedRecipes.map(recipe => (
               <li key={recipe._id}>
                 <div className="recipe-info">
-                  <img src={recipe.imageUrl} alt={recipe.title} />
+                  <Link to={`/recipes/${recipe._id}`}>
+                    <img src={recipe.imageUrl} alt={recipe.title} />
+                  </Link>
                   <p>{recipe.title}</p>
                 </div>
                 <input
@@ -96,7 +99,9 @@ const Profile = () => {
             {addedRecipes.map(recipe => (
               <li key={recipe._id}>
                 <div className="recipe-info">
-                  <img src={recipe.imageUrl} alt={recipe.title} />
+                  <Link to={`/recipes/${recipe._id}`}>
+                    <img src={recipe.imageUrl} alt={recipe.title} />
+                  </Link>
                   <p>{recipe.title}</p>
                   <p className="likes-count">Likes: {recipe.likes?.length || 0}</p>
                 </div>
