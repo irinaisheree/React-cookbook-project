@@ -89,6 +89,7 @@ const Profile = () => {
                   checked={!!cookedStatus[recipe._id]}
                   onChange={() => handleCookedStatusChange(recipe._id)}
                 />
+                 <p>Cooked</p>
               </li>
             ))}
           </ul>
@@ -103,7 +104,7 @@ const Profile = () => {
                     <img src={recipe.imageUrl} alt={recipe.title} />
                   </Link>
                   <p>{recipe.title}</p>
-                  <p className="likes-count">Likes: {recipe.likes?.length || 0}</p>
+                  <p className="likes-count">Added to lists: {recipe.likes?.length || 0}</p>
                 </div>
               </li>
             ))}

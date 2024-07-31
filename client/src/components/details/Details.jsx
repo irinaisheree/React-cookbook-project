@@ -128,50 +128,61 @@ const RecipeDetails = () => {
 
     return (
         <div className="recipe-details">
-            {error && <p className="error">{error}</p>}
-            {recipe ? (
-                <>
-                    <h1>{recipe.title}</h1>
-                    {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} />}
-                    <p>{recipe.description}</p>
-                    <p>Total Cost: ${recipe.totalCost}</p>
-                    <p>Creator: {recipe.creator.email}</p>
-                    <p>People who will try this recipe: {likeCount}</p>
-
-                    {/* Conditional Rendering of Buttons */}
-                    <div className="recipe-actions">
-                        {userId ? (
-                            <>
-                                {isLiked ? (
-                                    <button className="button try-button" onClick={handleLike}>
-                                        Added to List
-                                    </button>
-                                ) : (
-                                    <button className="button try-button" onClick={handleLike}>
-                                        Try this Recipe
-                                    </button>
-                                )}
-                                {recipe.creator._id === userId && (
-                                    <>
-                                        <button className="button edit-button" onClick={handleEdit}>
-                                            Edit
-                                        </button>
-                                        <button className="button delete-button" onClick={handleDelete}>
-                                            Delete
-                                        </button>
-                                    </>
-                                )}
-                            </>
-                        ) : (
-                            <h2>Please log in to like or edit recipes.</h2>
-                        )}
+        {error && <p className="error">{error}</p>}
+        {recipe ? (
+            <>
+                <h1>{recipe.title}</h1>
+                {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} />}
+                
+                {/* Flexbox Container for Description and Ingredients */}
+                <div className="recipe-details-content">
+                    <div className="recipe-details-left">
+                        <p className="description">How to cook it: {recipe.description}</p>
                     </div>
-                </>
-            ) : (
-                <p>Loading...</p>
-            )}
-        </div>
-    );
+                    <div className="recipe-details-right">
+                        <p className="ingredients">Ingredients: {recipe.ingredients}</p>
+                    </div>
+                </div>
+                
+                {/* Other Recipe Details Below */}
+                <p>Total Cost: ${recipe.totalCost}</p>
+                <p>Creator: {recipe.creator.email}</p>
+                <p>People who will try this recipe: {likeCount}</p>
+    
+                {/* Conditional Rendering of Buttons */}
+                <div className="recipe-actions">
+                    {userId ? (
+                        <>
+                            {isLiked ? (
+                                <button className="button try-button" onClick={handleLike}>
+                                    Added to List
+                                </button>
+                            ) : (
+                                <button className="button try-button" onClick={handleLike}>
+                                    Try this Recipe
+                                </button>
+                            )}
+                            {recipe.creator._id === userId && (
+                                <>
+                                    <button className="button edit-button" onClick={handleEdit}>
+                                        Edit
+                                    </button>
+                                    <button className="button delete-button" onClick={handleDelete}>
+                                        Delete
+                                    </button>
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        <h2>Please log in to like or edit recipes.</h2>
+                    )}
+                </div>
+            </>
+        ) : (
+            <p>Loading...</p>
+        )}
+    </div>
+    )    
 };
 
 export default RecipeDetails;

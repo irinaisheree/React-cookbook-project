@@ -7,6 +7,7 @@ export default function Edit() {
     title: '',
     imageUrl: '',
     description: '',
+    ingredients: '',
     totalCost: '',
   });
   const [loading, setLoading] = useState(true);
@@ -25,6 +26,7 @@ export default function Edit() {
           title: data.title,
           imageUrl: data.imageUrl,
           description: data.description,
+          ingredients: data.ingredients,
           totalCost: data.totalCost,
         });
       } catch (err) {
@@ -96,6 +98,15 @@ export default function Edit() {
           <textarea
             name="description"
             value={form.description}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+          Ingredients:
+          <textarea
+            name="ingredients"
+            value={form.ingredients}
             onChange={handleChange}
             required
           />

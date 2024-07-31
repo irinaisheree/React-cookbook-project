@@ -6,6 +6,15 @@ export default function AddRecipePage() {
     title: '',
     imageUrl: '',
     description: '',
+    ingredients: '',
+    totalCost: '',
+  });
+  
+  const [errors, setErrors] = useState({
+    title: '',
+    imageUrl: '',
+    description: '',
+    ingredients: '',
     totalCost: '',
   });
 
@@ -15,15 +24,45 @@ export default function AddRecipePage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const validateForm = () => {
+    let valid = true;
+    let newErrors = { title: '', imageUrl: '', description: '', ingredients: '',totalCost: '' };
+
+    if (!form.title) {
+      newErrors.title = 'Title is required';
+      valid = false;
+    }
+    if (!form.description) {
+      newErrors.description = 'Description is required';
+      valid = false;
+    }
+    if (!form.totalCost) {
+      newErrors.totalCost = 'Total Cost is required';
+      valid = false;
+    }
+
+    if (!form.ingredients) {
+        newErrors.totalCost = 'Ingredients is required';
+        valid = false;
+      }
+    // Add more validation as needed
+
+    setErrors(newErrors);
+    return valid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) return; // Exit if validation fails
+
     try {
-        const token = localStorage.getItem('token')
+      const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:3000/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-         'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(form)
       });
@@ -49,8 +88,8 @@ export default function AddRecipePage() {
             name="title"
             value={form.title}
             onChange={handleChange}
-            required
           />
+          {errors.title && <p className="error">{errors.title}</p>}
         </label>
         <label>
           Image URL:
@@ -67,8 +106,18 @@ export default function AddRecipePage() {
             name="description"
             value={form.description}
             onChange={handleChange}
-            required
           />
+          {errors.description && <p className="error">{errors.description}</p>}
+        </label>
+        <label>
+          Ingredients:
+          <input
+            type="text"
+            name="ingredients"
+            value={form.ingredients}
+            onChange={handleChange}
+          />
+          {errors.ingredients && <p className="error">{errors.ingredients}</p>}
         </label>
         <label>
           Total Cost:
@@ -77,11 +126,10 @@ export default function AddRecipePage() {
             name="totalCost"
             value={form.totalCost}
             onChange={handleChange}
-            required
           />
+          {errors.totalCost && <p className="error">{errors.totalCost}</p>}
         </label>
-     
-        <button type="submit" onClick={handleSubmit}>Add Recipe</button>
+        <button type="submit">Add Recipe</button>
       </form>
     </div>
   );

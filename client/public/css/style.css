@@ -1120,8 +1120,7 @@ p a:hover {
 
   /* details styles */
 
-  /* Recipe Details Section */
-.recipe-details {
+  .recipe-details {
     width: 80%;
     max-width: 800px;
     margin: 50px auto;
@@ -1130,31 +1129,42 @@ p a:hover {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-  }
-  
-  .recipe-details h1 {
+}
+
+.recipe-details h1 {
     color: #a0496c;
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 20px;
-  }
-  
-  .recipe-details img {
+}
+
+.recipe-details img {
     max-width: 100%;
     height: auto;
     border-radius: 5px;
     margin-bottom: 20px;
-  }
-  
-  .recipe-details p {
+}
+
+.recipe-details-content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.recipe-details-left,
+.recipe-details-right {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.recipe-details p {
     color: #df6086; /* Text color */
-	font-weight:bolder;
+    font-weight: bolder;
     font-size: 16px; /* Font size */
     line-height: 1.6; /* Line height for readability */
     margin-bottom: 15px; /* Space between paragraphs */
     text-align: justify; /* Justified text alignment */
     text-shadow: 1px 1px 0 #fde8f7; /* Text shadow for subtle depth */
-    
     background-color: #f9f6f4; /* Light background for text block */
     padding: 10px; /* Padding around text */
     border-radius: 5px; /* Rounded corners */
@@ -1168,12 +1178,11 @@ p a:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enhanced shadow on hover */
 }
 
-  
-  .recipe-actions {
+.recipe-actions {
     margin-top: 20px;
-  }
-  
-  .button {
+}
+
+.button {
     display: inline-block;
     padding: 10px 20px;
     border-radius: 5px;
@@ -1183,28 +1192,28 @@ p a:hover {
     color: #ffffff;
     margin: 0 10px;
     transition: background 0.3s ease, color 0.3s ease;
-  }
-  
-  .edit-button {
-    background: #a0496c;
-  }
-  
-  .edit-button:hover {
-    background: #7c0032;
-  }
-  
-  .delete-button {
-    background: #e94f4f;
-  }
-  
-  .delete-button:hover {
-    background: #c43d3d;
-  }
-  .try-button {
-    background: #e94f8d;
-  }
+}
 
-  
+.edit-button {
+    background: #a0496c;
+}
+
+.edit-button:hover {
+    background: #7c0032;
+}
+
+.delete-button {
+    background: #e94f4f;
+}
+
+.delete-button:hover {
+    background: #c43d3d;
+}
+
+.try-button {
+    background: #e94f8d;
+}
+
 
   /* edit */
 
@@ -1352,6 +1361,8 @@ p a:hover {
 	font-weight: bold;
   }
 
+
+
   /* navigation */
   #header ul li a {
     display: block;
@@ -1411,3 +1422,11 @@ p a:hover {
 	background-color: #f0f0f0; /* Light background color on hover */
   }
   
+
+  /* error */
+  /* Add this to your CSS file */
+.error {
+  color: red;
+  font-size: 14px;
+  margin: 5px 0;
+}
