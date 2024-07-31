@@ -14,27 +14,47 @@ import RecipesList from './components/recipes-list/Recepies-list';
 import RecipeDetails from './components/details/Details';
 import Edit from './components/edit/Edit';
 import Profile from './components/profile/Profile';
+import ProtectedRoute from './components/protection/Protection';
+
 
 function App() {
-    return (<>
-        <AuthProvider>
-            <Navigation />
-            <Routes>
-                <Route path="/" element={<Content />} />
-                {/* <Route path="/recipes" element={<RecepiesList />} /> */}
-                <Route path="/add" element={<Add />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/auth/register" element={<Register />} />
-                <Route path="/auth/login" element={<Login />} />
-                <Route path="/recipes" element={<RecipesList />} />
-                <Route path="/recipes/:recipeId" element={<RecipeDetails />} />
-                <Route path="/recipes/:recipeId/edit" element={<Edit />} />
-                <Route path="/profile" element={<Profile />} />
-            </Routes>
-        </AuthProvider>
+    return (
+        <>
+            <AuthProvider>
+                <Navigation />
+                <Routes>
+                    <Route path="/" element={<Content />} />
+                    <Route
+                        path="/add"
+                        element={
+                            <ProtectedRoute>
+                                <Add />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/auth/register" element={<Register />} />
+                    <Route path="/auth/login" element={<Login />} />
+                    <Route path="/recipes" element={<RecipesList />} />
+                    <Route path="/recipes/:recipeId" element={<RecipeDetails />} />
+                    <Route path="/recipes/:recipeId/edit" 
+                    element={
+                      <ProtectedRoute>
+                      <Edit />
+                  </ProtectedRoute>
+                    } 
+                    />
+                    <Route path="/profile" 
+                    element={
+                      <ProtectedRoute>
+                      <Profile />
+                  </ProtectedRoute>
+                    } 
+                    />
+                </Routes>
+            </AuthProvider>
             <Footer />
-            
-            </>
+        </>
     );
 }
 
