@@ -48,7 +48,7 @@ export default function Login() {
                 }
 
                 // Use the login function from AuthContext
-                login(data.user, data.token); // Ensure backend returns user data and token
+                login(data.user, data.token);
 
                 alert('Login successful!');
                 navigate('/');

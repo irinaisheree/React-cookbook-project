@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '../../contexts/userContext'; // Correct path
+import { useAuth } from '../../contexts/userContext'; 
 
 const RecipeDetails = () => {
     const { recipeId } = useParams();
     const { user } = useAuth(); // Access userId from AuthContext
     const [recipe, setRecipe] = useState(null);
     const [error, setError] = useState('');
-    const [isLiked, setIsLiked] = useState(false); // Track if the recipe is liked by the user
-    const [likeCount, setLikeCount] = useState(0); // Track the total number of likes
+    const [isLiked, setIsLiked] = useState(false); // Check if the recipe is liked by the user
+    const [likeCount, setLikeCount] = useState(0); // Check the total number of likes
     const navigate = useNavigate();
 
     const userId = user?._id;
@@ -33,10 +33,8 @@ const RecipeDetails = () => {
 
                     // Check if the current user's ID is present in the likes array
                     const userLiked = data.likes.some(like => like._id === userId);
-                    console.log('Recipe likes:', data.likes);
-                    console.log('User ID:', userId);
+             
                     setIsLiked(userLiked);
-                    console.log('Is liked by user:', userLiked);
                     setLikeCount(data.likes.length);
                 } else {
                     setError('Recipe data is incomplete.');
@@ -88,7 +86,7 @@ const RecipeDetails = () => {
 
     const handleEdit = () => {
         console.log('Navigating to edit page...');
-        navigate(`/recipes/${recipeId}/edit`); // Redirect to the edit page
+        navigate(`/recipes/${recipeId}/edit`); 
     };
 
     const handleDelete = async () => {
@@ -108,7 +106,7 @@ const RecipeDetails = () => {
             if (response.ok) {
                 console.log('Recipe deleted successfully');
                 alert('Recipe deleted successfully!');
-                navigate('/recipes'); // Redirect to the recipes list
+                navigate('/recipes'); 
             } else {
                 const contentType = response.headers.get('content-type');
                 let errorMessage = 'Failed to delete recipe';
@@ -134,7 +132,7 @@ const RecipeDetails = () => {
                 <h1>{recipe.title}</h1>
                 {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} />}
                 
-                {/* Flexbox Container for Description and Ingredients */}
+       
                 <div className="recipe-details-content">
                     <div className="recipe-details-left">
                         <p className="description">How to cook it: {recipe.description}</p>
@@ -144,12 +142,12 @@ const RecipeDetails = () => {
                     </div>
                 </div>
                 
-                {/* Other Recipe Details Below */}
+          
                 <p>Total Cost: ${recipe.totalCost}</p>
                 <p>Creator: {recipe.creator.email}</p>
                 <p>People who will try this recipe: {likeCount}</p>
     
-                {/* Conditional Rendering of Buttons */}
+           
                 <div className="recipe-actions">
                     {userId ? (
                         <>

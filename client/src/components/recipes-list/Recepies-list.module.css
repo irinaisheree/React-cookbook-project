@@ -50,3 +50,13 @@
 .detailsButton:active {
     background: #6b0029;
 }
+
+/* Add this for when there are no recipes */
+.noRecipesText {
+    color: #a0496c;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 50px;
+    text-align: center;
+    width: 100%;
+}

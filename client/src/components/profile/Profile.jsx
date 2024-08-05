@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../contexts/userContext'; // Adjust path as needed
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useAuth } from '../../contexts/userContext'; 
+import { Link } from 'react-router-dom'; 
 
 const Profile = () => {
   const { user, isLoggedIn } = useAuth();
@@ -90,7 +90,7 @@ const Profile = () => {
                   checked={!!cookedStatus[recipe._id]}
                   onChange={() => handleCookedStatusChange(recipe._id)}
                 />
-                 <p>Cooked</p>
+                 <p className="likes-count">I tried this recipe</p>
               </li>
             ))}
           </ul>

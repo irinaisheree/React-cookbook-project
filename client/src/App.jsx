@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/userContext'; // Correct path
-
+import { AuthProvider } from './contexts/userContext'; 
 import Navigation from './components/navigation/Navigation';
 import Content from './components/content/Content';
 import Footer from './components/footer/Footer';

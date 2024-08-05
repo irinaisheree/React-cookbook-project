@@ -45,7 +45,7 @@ export default function AddRecipePage() {
         newErrors.totalCost = 'Ingredients is required';
         valid = false;
       }
-    // Add more validation as needed
+
 
     setErrors(newErrors);
     return valid;
@@ -54,7 +54,7 @@ export default function AddRecipePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!validateForm()) return; // Exit if validation fails
+    if (!validateForm()) return; 
 
     try {
       const token = localStorage.getItem('token');
@@ -68,7 +68,7 @@ export default function AddRecipePage() {
       });
 
       if (response.ok) {
-        navigate('/recipes'); // Redirect to the recipes page after adding
+        navigate('/recipes'); 
       } else {
         console.error('Error adding recipe:', await response.text());
       }
