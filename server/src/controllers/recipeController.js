@@ -159,9 +159,6 @@ router.get('/recipes/:recipeId/edit', isAuth, async (req, res) => {
 
 ///
 
-
-
-
 router.get('/users/:userId/likedRecipes', isAuth, async (req, res) => {
     try {
       const user = await User.findById(req.params.userId).populate('likedRecipes');

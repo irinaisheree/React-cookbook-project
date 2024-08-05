@@ -37,6 +37,7 @@ const Profile = () => {
         const storedStatus = JSON.parse(localStorage.getItem(`cookedStatus_${user._id}`)) || {};
         setCookedStatus(storedStatus);
       } catch (error) {
+      
         console.error('Error fetching user data:', error);
       }
     }
