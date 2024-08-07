@@ -99,7 +99,7 @@ export default function Login() {
                 <input type="submit" value="Login" />
             </form>
             <div className="sign-txt">
-                Not yet a member? <a href="#">Signup now</a>
+                Not yet a member? <a href="/auth/register">Signup now</a>
             </div>
         </div>
     );

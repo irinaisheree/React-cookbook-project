@@ -91,6 +91,7 @@ export default function Edit() {
             name="imageUrl"
             value={form.imageUrl}
             onChange={handleChange}
+            required
           />
         </label>
         <label>

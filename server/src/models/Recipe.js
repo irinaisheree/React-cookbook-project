@@ -15,12 +15,12 @@ const recipeSchema = new mongoose.Schema({
     description: {
         type: String, 
         required: true,
-        maxLength: [1000, 'Maximum characters exceeded - description cannot be longer than 1000 characters']
+        maxLength: [10000, 'Maximum characters exceeded - description cannot be longer than 1000 characters']
     },
     ingredients: {
         type: String, 
         required: [true, 'Please add ingredients'],
-        maxLength: [1000, 'Maximum characters exceeded - ingredients cannot be longer than 1000 characters']
+        maxLength: [10000, 'Maximum characters exceeded - ingredients cannot be longer than 1000 characters']
     },
     totalCost: {
         type: Number, 

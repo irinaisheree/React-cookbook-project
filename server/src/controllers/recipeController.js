@@ -184,11 +184,29 @@ router.get('/users/:userId/likedRecipes', isAuth, async (req, res) => {
     }
   });
 
+  
+  router.get('/users/:userId/checkedRecipes', isAuth, async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const user = await User.findById(userId).populate('checkedRecipes');
+      
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.json({ checkedRecipes: user.checkedRecipes });
+    } catch (error) {
+      res.status(500).json({ message: 'Error retrieving checked recipes', error });
+    }
+  });
+  
+
 
   router.post('/users/:userId/checkedRecipes/:recipeId', isAuth, async (req, res) => {
     try {
       const { userId, recipeId } = req.params;
       const user = await User.findById(userId);
+  
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -204,8 +222,10 @@ router.get('/users/:userId/likedRecipes', isAuth, async (req, res) => {
       await user.save();
       res.json({ message: 'Checked status updated successfully' });
     } catch (error) {
-      res.status(500).json({ message: 'Error updating checked status', error });
+      console.error('Error updating checked status:', error);
+      res.status(500).json({ message: 'Error updating checked status', error: error.message });
     }
   });
+  
   
 module.exports = router

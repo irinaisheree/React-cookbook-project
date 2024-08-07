@@ -172,7 +172,7 @@ const RecipeDetails = () => {
                             )}
                         </>
                     ) : (
-                        <h2>Please log in to like or edit recipes.</h2>
+                        <h2>Please log in to add or like recipes.</h2>
                     )}
                 </div>
             </>

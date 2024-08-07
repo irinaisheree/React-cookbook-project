@@ -31,32 +31,30 @@ try{
 
 exports.isAuth = async (req, res, next) => {
     try {
-        // Extract token from Authorization header if present
-        const token = req.header('Authorization') ? req.header('Authorization').replace('Bearer ', '') : null;
-        if (!token) {
-            console.log('No token provided');
-            throw new Error('Token not provided');
-        }
-
-        // Verify token
-        const decoded = await jwt.verify(token, SECRET);
-        const userId = decoded._id; // Extract user ID from decoded token
-
-        // Find the user in the database
-        const user = await User.findById(userId);
-        if (!user) {
-            console.log('User not found');
-            throw new Error('User not found');
-        }
-
-        req.token = token;
-        req.user = user;
-        next();
+      // Extract token from Authorization header if present
+      const token = req.header('Authorization') ? req.header('Authorization').replace('Bearer ', '') : null;
+      if (!token) {
+        throw new Error('Token not provided');
+      }
+  
+      // Verify token
+      const decoded = await jwt.verify(token, SECRET);
+      const userId = decoded._id; // Extract user ID from decoded token
+  
+      // Find the user in the database
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new Error('User not found');
+      }
+  
+      req.token = token;
+      req.user = user;
+      next();
     } catch (error) {
-        console.error('Authorization error:', error.message);
-        res.status(401).send({ error: 'Unauthorized' });
+      console.error('Authorization error:', error.message);
+      res.status(401).json({ error: 'Unauthorized' });
     }
-};
+  };
 
 
 
