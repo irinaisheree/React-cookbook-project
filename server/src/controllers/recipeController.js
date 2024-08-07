@@ -35,7 +35,7 @@ router.get('/recipes', async (req, res) => {
         res.json(allRecipes);
     } catch (error) {
         console.error('Error fetching recipes:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: Error.message });
     }
 });
 
@@ -51,7 +51,7 @@ router.get('/recipes/:recipeId', async (req, res) => {
         return res.json(oneRecipe);
     } catch (error) {
         console.error('Error fetching one recipe:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: Error.message });
     }
 });
 
@@ -68,7 +68,7 @@ router.get('/recipes/:recipeId/edit', isAuth, async (req, res) => {
       res.status(200).json(recipe);
     } catch (error) {
       console.error('Error fetching recipe:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: Error.message });
     }
   });
   
@@ -84,7 +84,7 @@ router.get('/recipes/:recipeId/edit', isAuth, async (req, res) => {
       res.status(200).json(updatedRecipe);
     } catch (error) {
       console.error('Error updating recipe:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: Error.message });
     }
   });
 

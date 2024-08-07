@@ -11,13 +11,26 @@ userRouter.get('/register', (req, res) => {
     res.status(405).json({ error: 'GET recipe allowed for this endpoint - register' });
 });
 
-userRouter.post('/register', async (req, res) => {
+userRouter.post('/register', isGuest, async (req, res) => {
     try {
         const user = await userManager.register(req.body);
         res.json(user);
     } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        if (error.name === 'ValidationError') {
+            // Handle Mongoose validation errors
+            const errors = Object.values(error.errors).map(err => ({
+                field: err.path,
+                message: err.message
+            }));
+            return res.status(400).json({ errors });
+        } else {
+            if (error.message === 'Email already exists') {
+                return res.status(400).json({ errors: [{ field: 'email', message: error.message }] });
+            }
+
+            console.error('Error registering user:', error);
+            return res.status(500).json({ error: 'Something bad happened. Please, try again.' });
+        }
     }
 });
 
@@ -56,7 +69,7 @@ userRouter.get('/:userId/profile', async(req, res) => {
         return res.json(currentUser);
     } catch (error) {
         console.error('Error fetching one user:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: Error.message });
     }
 })
 

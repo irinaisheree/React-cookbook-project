@@ -29,20 +29,25 @@ export default function AddRecipePage() {
     let newErrors = { title: '', imageUrl: '', description: '', ingredients: '',totalCost: '' };
 
     if (!form.title) {
-      newErrors.title = 'Title is required';
+      newErrors.title = 'Please add Title';
       valid = false;
     }
     if (!form.description) {
-      newErrors.description = 'Description is required';
+      newErrors.description = 'Please add Description';
       valid = false;
     }
     if (!form.totalCost) {
-      newErrors.totalCost = 'Total Cost is required';
+      newErrors.totalCost = 'Please add Total Cost';
       valid = false;
     }
 
     if (!form.ingredients) {
-        newErrors.totalCost = 'Ingredients is required';
+        newErrors.ingredients = 'Please add the Ingredients';
+        valid = false;
+      }
+
+      if (!form.imageUrl) {
+        newErrors.imageUrl = 'Please add Image';
         valid = false;
       }
 
@@ -99,6 +104,7 @@ export default function AddRecipePage() {
             value={form.imageUrl}
             onChange={handleChange}
           />
+             {errors.imageUrl && <p className="error">{errors.imageUrl}</p>}
         </label>
         <label>
           Description:

@@ -5,11 +5,11 @@ const recipeSchema = new mongoose.Schema({
   
     title: {
         type: String, 
-        required: [true, "type is missing"],
+        required: [true, "Please add title"],
     },
     imageUrl: {
         type: String, 
-        required: true,
+        required: [true, 'Please add Image'],
         match: [/^https?:\/\//, 'Invalid poster link']
     },
     description: {
@@ -19,7 +19,7 @@ const recipeSchema = new mongoose.Schema({
     },
     ingredients: {
         type: String, 
-        required: true,
+        required: [true, 'Please add ingredients'],
         maxLength: [1000, 'Maximum characters exceeded - ingredients cannot be longer than 1000 characters']
     },
     totalCost: {

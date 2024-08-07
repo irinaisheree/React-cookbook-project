@@ -22,8 +22,23 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Reset errors
     setErrors({ email: '', password: '', repeatPassword: '' });
 
+    // Client-side validation
+    const newErrors = {};
+    if (!form.email) newErrors.email = 'Email is required.';
+    if (!form.password) newErrors.password = 'Password is required.';
+    if (form.password !== form.repeatPassword) newErrors.repeatPassword = 'Passwords do not match.';
+
+    // If there are validation errors, alert them and return early
+    if (Object.keys(newErrors).length > 0) {
+      Object.values(newErrors).forEach(error => alert(error));
+      setErrors(newErrors);
+      return;
+    }
+
+    // Proceed with server-side registration
     try {
       const response = await fetch('http://localhost:3000/auth/register', {
         method: 'POST',
@@ -33,15 +48,24 @@ export default function Register() {
         body: JSON.stringify(form),
       });
 
+   
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
+        if (data.errors) {
+          // Alert errors from the server
+      
+          Object.values(data.errors).forEach(error => alert(error.message));
+        
+        } else {
+          throw new Error(data.error || "Registration failed");
+        }
+        return;
       }
 
       alert('Registration successful!');
-      navigate('/auth/login')
+      navigate('/auth/login');
       setForm({ email: '', password: '', repeatPassword: '' });
-      
+
     } catch (error) {
       console.error('Error:', error.message);
       alert(`Error: ${error.message}`);
@@ -63,9 +87,7 @@ export default function Register() {
               required
             />
             <i className="icon fas fa-envelope"></i>
-            {errors.email && <i className="error error-icon fas fa-exclamation-circle"></i>}
           </div>
-          {errors.email && <div className="error error-txt">{errors.email}</div>}
         </div>
         <div className="field">
           <div className="input-area">
@@ -78,9 +100,7 @@ export default function Register() {
               required
             />
             <i className="icon fas fa-lock"></i>
-            {errors.password && <i className="error error-icon fas fa-exclamation-circle"></i>}
           </div>
-          {errors.password && <div className="error error-txt">{errors.password}</div>}
         </div>
         <div className="field">
           <div className="input-area">
@@ -93,9 +113,7 @@ export default function Register() {
               required
             />
             <i className="icon fas fa-lock"></i>
-            {errors.repeatPassword && <i className="error error-icon fas fa-exclamation-circle"></i>}
           </div>
-          {errors.repeatPassword && <div className="error error-txt">{errors.repeatPassword}</div>}
         </div>
         <input type="submit" value="Register" />
       </form>
