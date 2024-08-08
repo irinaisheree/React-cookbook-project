@@ -36,6 +36,7 @@ function App() {
                     <Route path="/auth/register" element={<Register />} />
                     <Route path="/auth/login" element={<Login />} />
                     <Route path="/recipes" element={<RecipesList />} />
+                    
                     <Route path="/recipes/:recipeId" element={<RecipeDetails />} />
                     <Route path="/recipes/:recipeId/edit" 
                     element={
