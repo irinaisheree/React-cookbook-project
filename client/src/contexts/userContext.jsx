@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
         if (token && storedUser) {
             setUser(storedUser); // Set user from localStorage if valid
         }
+
     }, []);
 
     // Login function to set user and token in state and localStorage
